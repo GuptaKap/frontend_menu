@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Card from './Card';
 import { Link } from 'react-router-dom';
-import { fetchmenuitems } from '../http';
+import { fetchAllCategoryData, fetchmenuitems } from '../http';
 
 function Home(props) {
   const host = process.env.REACT_APP_API_BASE_URL;
@@ -11,73 +11,95 @@ function Home(props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // useEffect(() => {
-  //   const getMenuItems = async () => {
-  //     const { data } = await fetchmenuitems();
-  //     console.log(data);
-  //   };
-  //   getMenuItems();
-  // }, [])
-
   useEffect(() => {
-
-    fetch(`${host}/api/menu/fetchcategory`, {
-      method: "GET",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin":"*",
-      },
-    })
-      .then(response => {
-        console.log(response);
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        return response.json();
-      })
-      .then(data => {
+    const getMenuItems = async () => {
+      try {
+        const { data } = await fetchmenuitems();
+        console.log(data);
         setCategory(data);
-      })
-      .catch(error => {
-        console.error('Error fetching category data:', error);
-        setError(error.message);
-      });
-  }, []);
-
-  useEffect(() => {
-    fetch(`${host}/api/menu/fetchAllData?category=all`, {
-      method: "GET",
-      mode: "no-cors",
-      headers: {
-        "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
-      },
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error('Failed to fetch data');
-        }
-        return response.json();
-      })
-      .then(data => {
-        setMenu(data);
+      } catch (err) {
+        console.log(err);
+        setError(err.message);
+      } finally {
         setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching menu data:', error);
-        setError(error.message);
-        setLoading(false);
-      });
-  }, []);
+      }
+    };
+    getMenuItems();
+  }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+useEffect(() => {
+  const getAllCategoryData = async () => {
+    try {
+      const { data } = await fetchAllCategoryData();
+      setMenu(data);
+    } catch (err) {
+      console.log(err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-  if (error) {
-    return <div>Error: {error}</div>;
-  }
+  getAllCategoryData();
+  }, []);
+  // useEffect(() => {
+
+  //   fetch(`${host}/api/menu/fetchcategory`, {
+  //     method: "GET",
+  //     mode: "no-cors",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Access-Control-Allow-Origin":"*",
+  //     },
+  //   })
+  //     .then(response => {
+  //       console.log(response);
+  //       if (!response.ok) {
+  //         throw new Error('Failed to fetch data');
+  //       }
+  //       return response.json();
+  //     })
+  //     .then(data => {
+  //       setCategory(data);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching category data:', error);
+  //       setError(error.message);
+  //     });
+  // }, []);
+
+  // useEffect(() => {
+  //   fetch(`${host}/api/menu/fetchAllData?category=all`, {
+  //     method: "GET",
+  //     mode: "no-cors",
+  //     headers: {
+  //       "Content-Type": "application/json",
+  //       "Access-Control-Allow-Origin": "*",
+  //     },
+  //   })
+  //     .then(response => {
+  //       if (!response.ok) {
+  //         throw new Error('Failed to fetch data');
+  //       }
+  //       return response.json();
+  //     })
+  //     .then(data => {
+  //       setMenu(data);
+  //       setLoading(false);
+  //     })
+  //     .catch(error => {
+  //       console.error('Error fetching menu data:', error);
+  //       setError(error.message);
+  //       setLoading(false);
+  //     });
+  // }, []);
+
+  // if (loading) {
+  //   return <div>Loading...</div>;
+  // }
+
+  // if (error) {
+  //   return <div>Error: {error}</div>;
+  // }
 
   return (
     <>
