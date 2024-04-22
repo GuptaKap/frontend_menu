@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import Card from './Card';
 import { Link } from 'react-router-dom';
+import { fetchmenuitems } from '../http';
 
 function Home(props) {
   const host = process.env.REACT_APP_API_BASE_URL;
@@ -10,7 +11,16 @@ function Home(props) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // useEffect(() => {
+  //   const getMenuItems = async () => {
+  //     const { data } = await fetchmenuitems();
+  //     console.log(data);
+  //   };
+  //   getMenuItems();
+  // }, [])
+
   useEffect(() => {
+
     fetch(`${host}/api/menu/fetchcategory`, {
       method: "GET",
       mode: "no-cors",
@@ -20,6 +30,7 @@ function Home(props) {
       },
     })
       .then(response => {
+        console.log(response);
         if (!response.ok) {
           throw new Error('Failed to fetch data');
         }
@@ -40,7 +51,7 @@ function Home(props) {
       mode: "no-cors",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin":"*",
+        "Access-Control-Allow-Origin": "*",
       },
     })
       .then(response => {

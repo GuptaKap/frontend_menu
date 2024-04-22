@@ -3,44 +3,14 @@ import { useNavigate } from 'react-router-dom';
 
 const AddMenu = () => {
   const [Mdetails, setMdetails] = useState({ Rname: "", category: "", address: "", state: "", city: "" });
-  const [file, setFile] = useState(null);
+  
   let navigate = useNavigate();
 
-  
-
-  const addImage = async (e) => {
-    e.preventDefault();
-    // Check if a file is selected
-    if (!file) {
-      console.log('No file selected');
-      // return;
-    }
-
-    try {
-      const formData = new FormData();
-      formData.append("photo", file);
-
-      const res = await fetch('http://localhost:2000/api/menu/register', {
-        method: "POST",
-        body: formData, // Pass formData directly as the body
-      });
-
-      console.log("Response:", res);
-    } catch (error) {
-      console.error("Error:", error);
-    }
-  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     const { Rname, category, address, state, city } = Mdetails;
-    // const formData = new FormData();
-    // formData.append("image", image);
-    // formData.append("Rname", Rname);
-    // formData.append("category", category);
-    // formData.append("address", address);
-    // formData.append("state", state);
-    // formData.append("city", city);
+   
 
     const response = await fetch('http://localhost:2000/api/menu/add', {
       method: "POST",
@@ -99,20 +69,17 @@ const AddMenu = () => {
                 <input type="text" id='city' value={Mdetails.city} className='w-full border border-gray-400 rounded-xl px-3 py-2' onChange={onChange} />
               </div>
             </div>
-            {/* <div>
+            <div>
               <label htmlFor="image" className='block mb-2 ml-1'>Upload Menu Image</label>
-              <input type="file" name="image" id="image" className='w-full border border-gray-400 rounded-xl px-3 py-2 mb-4' onChange={(e) => setFile(e.target.files[0])} />
+              <input type="file" name="image" id="image" className='w-full border border-gray-400 rounded-xl px-3 py-2 mb-4'  />
               
-            </div> */}
+            </div>
             <div>
               <button className='bg-gray-700 text-white text-xl w-full border border-gray-400 rounded-xl px-3 py-2'>Submit</button>
             </div>
           </div>
         </form>
-        <form name='edit' className=' text-center mb-5 flex mt-2 mx-2' onSubmit={addImage}>
-          <input onChange={(e) => setFile(e.target.files[0])} name='photo' id='photo' type="file" className='text-sm mx-2' />
-          {file ? <button type="submit"  className='bg-green-400 mb-6 text-sm rounded-md px-2 py-1'>Upload</button> : null}
-        </form>
+       
       </div>
     </>
   );
