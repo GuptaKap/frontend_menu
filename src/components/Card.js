@@ -7,7 +7,7 @@ const Card = (props) => {
     const queryParams = new URLSearchParams(location.search);
     const category = queryParams.get('category');
 
-    const host = process.env.Base_URL;
+    const host = process.env.REACT_APP_API_BASE_URL;
     const [menu, setMenu] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);

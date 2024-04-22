@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 
 function Home(props) {
   const host = process.env.REACT_APP_API_BASE_URL;
+  // console.log(process.env.REACT_APP_API_BASE_URL);
   const [category, setCategory] = useState(null);
   const [menu, setMenu] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -12,8 +13,10 @@ function Home(props) {
   useEffect(() => {
     fetch(`${host}/api/menu/fetchcategory`, {
       method: "GET",
+      mode: "no-cors",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin":"*",
       },
     })
       .then(response => {
@@ -34,8 +37,10 @@ function Home(props) {
   useEffect(() => {
     fetch(`${host}/api/menu/fetchAllData?category=all`, {
       method: "GET",
+      mode: "no-cors",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin":"*",
       },
     })
       .then(response => {
